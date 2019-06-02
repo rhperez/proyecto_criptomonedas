@@ -1,5 +1,9 @@
 <?php
 
+  /**
+   *  Clase para modelar ticks
+   *
+   */
   class Tick {
 
     public $book;
