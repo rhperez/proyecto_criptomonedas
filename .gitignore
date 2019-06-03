@@ -39,3 +39,6 @@ Thumbs.db
 # Specific files and directories #
 ##################################
 connections/conn.php
+
+node_modules
+vendor
