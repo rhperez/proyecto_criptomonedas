@@ -3,6 +3,7 @@
   include_once "../includes/settings.php";
   include_once "../controllers/ctrlTicker.php";
   include_once "../classes/tick.php";
+  include_once "../classes/book.php";
 
   $URL_BASE = $PRODUCCION==1 ? $URL_PRODUCCION : $URL_PRUEBAS;
 
@@ -26,23 +27,23 @@
 
     if (!$response) {   // Si no hay respuesta se genera un tick vacio con error 400
       $status = 0;
-      echo "No se obtuvo respuesta del servidor.";
+      echo "<strong>Error 400:</strong> No se obtuvo respuesta del servidor.<br>";
       $error_code = '400';
-      $error_message = 'No hay respuesta del servidor';
+      $error_message = 'No se obtuvo respuesta del servidor.';
       $tick = new Tick($book, '', '', '', '', '', '', '', '', $status);
     }
     $json = json_decode($response);   // Guarda la respuesta en un json
     if ($json->success) {   // Se obtuvo el tick sin problemas
-      echo 'Respuesta exitosa!';
+      echo "Guardando info book: ".$json->payload->book."... <br>";
       $error_code = '0';
       $error_message = '';
       $tick = new Tick($json->payload->book, $json->payload->volume, $json->payload->last, $json->payload->high, $json->payload->low,
       $json->payload->vwap, $json->payload->ask, $json->payload->bid, $json->payload->created_at, $produccion);
+      echo "Info guardada exitosamente! <br>";
       //sendNotifications($book, $max_to_sell, $min_to_buy, $json->payload->last, $recipient);
     } else {  // Se genero un error desde el servidor
       $status = 3;
-      echo '<br>Error del servidor<br>';
-      echo $json->error->message;
+      echo "<strong>Error $json->error->code:</strong> $json->error->message.<br>";
       $error_code = $json->error->code;
       $error_message = $json->error->message;
       $tick = new Tick($book, '', '', '', '', '', '', '', '', $status);
@@ -52,9 +53,10 @@
   }
 
 
-  tickerBitso($URL_BASE, $PRODUCCION, 'btc_mxn');
-  tickerBitso($URL_BASE, $PRODUCCION, 'eth_mxn');
-  tickerBitso($URL_BASE, $PRODUCCION, 'xrp_mxn');
-  tickerBitso($URL_BASE, $PRODUCCION, 'ltc_mxn');
+  $arrayBooks = getBooks(); //  Obtiene los books de la base de datos
+  foreach ($arrayBooks as $book) {  //Por cada book obtiene un tick
+    tickerBitso($URL_BASE, $PRODUCCION, $book->book);
+  }
+
 
 ?>
