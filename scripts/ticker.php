@@ -1,9 +1,8 @@
 <?php
-
-  include_once "../includes/settings.php";
-  include_once "../controllers/ctrlTicker.php";
-  include_once "../classes/tick.php";
-  include_once "../classes/book.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/includes/settings.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/controllers/ctrlTicker.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/tick.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/book.php";
 
   $URL_BASE = $PRODUCCION==1 ? $URL_PRODUCCION : $URL_PRUEBAS;
 

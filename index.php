@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
 
+  $path = $_SERVER['DOCUMENT_ROOT'];
+  include_once $path."/proyecto_criptomonedas/controllers/ctrlTicker.php";
+  include_once $path."/proyecto_criptomonedas/classes/book.php";
+  include_once $path."/proyecto_criptomonedas/classes/tick.php";
+
+  function populateDropdownBooks() {
+    $arrayTicks = getLastTicks();
+    foreach ($arrayTicks as $tick) {
+      echo '<a class="dropdown-item" href="#" onclick="selectBook(\''.$tick->book.'\')" title="'.$tick->last.'">'.strtoupper($tick->book).'</a>';
+    }
+  }
+ ?>
 <head>
 
   <meta charset="utf-8">
@@ -138,17 +151,33 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Libro</h6>
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">Mercados:</div>
-                      <a class="dropdown-item" href="#">Mercado 1</a>
-                      <a class="dropdown-item" href="#">Mercado 2</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Más mercados..</a>
+                  <h6 class="m-0 font-weight-bold text-info" id="header_book">Libro</h6>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="dropdown no-arrow">
+                        <button class="btn btn-info btn-icon-split btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="icon text-white-50">
+                            <i class="fas fa-coins"></i>
+                          </span>
+                          <span class="text">Monedas</span>
+                        </button>
+                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
+                          <?php populateDropdownBooks(); ?>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="dropdown no-arrow">
+                        <button class="btn btn-info btn-icon-split btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="icon text-white-50">
+                            <i class="far fa-calendar"></i>
+                          </span>
+                          <span class="text">Periodos</span>
+                        </button>
+                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
+
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -382,6 +411,20 @@
   <!-- Page level custom scripts -->
   <script src="js/demo/chart-area-demo.js"></script>
   <script src="js/demo/chart-pie-demo.js"></script>
+
+  <script type="text/javascript">
+    var current_book = 'BTC_MXN';
+    var interval = '1 DAY';
+
+    jQuery(document).ready(function($) {
+      $("#header_book").text(current_book.toUpperCase());
+    });
+
+    function selectBook(book) {
+      current_book = book;
+      $("#header_book").text(current_book.toUpperCase());
+    }
+  </script>
 
 </body>
 

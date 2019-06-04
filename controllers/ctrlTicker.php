@@ -1,7 +1,9 @@
 <?php
 
-  include_once "../connections/conn.php";
-  include_once "../classes/tick.php";
+  $path = $_SERVER['DOCUMENT_ROOT'];
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/connections/conn.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/tick.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/book.php";
 
   /**
    *  Almacena la informacion de un tick en la base de datos.
@@ -38,6 +40,7 @@
   /**
    *  Devuelve los books almacenados en la base de datos
    *
+   *  @param integer tipo: opcional, 1 para books en MXN, 2 para books en BTC
    *  @return Book array: el arreglo de books obtenidos
    */
   function getBooks() {
@@ -53,6 +56,26 @@
     }
     $conn->close();
     return $arrayBooks;
+  }
+
+  function getLastTicks() {
+    $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap,
+     bitso_ask, bitso_bid, bitso_created_at, status
+     FROM Ticks
+     WHERE id IN
+       (SELECT MAX(id)
+       FROM Ticks
+       WHERE status=1
+       GROUP BY bitso_book)";
+    $conn = connect();
+    $result = mysqli_query($conn, $str_query);
+    $arrayTicks = array();
+    while ($row = $result->fetch_assoc()) {
+      $arrayTicks[] = new Tick($row['bitso_book'], $row['bitso_volume'], $row['bitso_last'], $row['bitso_high'], $row['bitso_low'],
+      $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['bitso_created_at'], $row['status']);
+    }
+    $conn->close();
+    return $arrayTicks;
   }
 
 ?>

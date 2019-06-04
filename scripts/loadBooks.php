@@ -1,8 +1,8 @@
 <?php
-
-  include_once "../includes/settings.php";
-  include_once "../controllers/ctrlTicker.php";
-  include_once "../classes/book.php";
+  $path = $_SERVER['DOCUMENT_ROOT'];
+  include_once $path."/proyecto_criptomonedas/includes/settings.php";
+  include_once $path."/proyecto_criptomonedas/controllers/ctrlTicker.php";
+  include_once $path."/proyecto_criptomonedas/classes/book.php";
 
   $URL_BASE = $PRODUCCION==1 ? $URL_PRODUCCION : $URL_PRUEBAS;
 
