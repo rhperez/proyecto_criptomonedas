@@ -1,6 +1,5 @@
 <?php
 
-  $path = $_SERVER['DOCUMENT_ROOT'];
   include_once "/home4/digitab1/public_html/proyecto_criptomonedas/connections/conn.php";
   include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/tick.php";
   include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/book.php";

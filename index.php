@@ -2,17 +2,39 @@
 <html lang="en">
 <?php
 
-  $path = $_SERVER['DOCUMENT_ROOT'];
-  include_once $path."/proyecto_criptomonedas/controllers/ctrlTicker.php";
-  include_once $path."/proyecto_criptomonedas/classes/book.php";
-  include_once $path."/proyecto_criptomonedas/classes/tick.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/controllers/ctrlTicker.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/book.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/tick.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/includes/settings.php";
 
-  function populateDropdownBooks() {
-    $arrayTicks = getLastTicks();
-    foreach ($arrayTicks as $tick) {
-      echo '<a class="dropdown-item" href="#" onclick="selectBook(\''.$tick->book.'\')" title="'.$tick->last.'">'.strtoupper($tick->book).'</a>';
+  $current_book = isset($_GET['book']) ? $_GET['book'] : $DEFAULT_BOOK;
+  $exploded_book = explode("_", $current_book);
+  $current_tick = null;
+
+  $arrayTicks = getLastTicks();
+  foreach ($arrayTicks as $tick) {
+    if ($tick->book == $current_book) {
+      $current_tick = $tick;
+      break;
     }
   }
+
+  function populateDropdownBooks($arrayTicks) {
+    foreach ($arrayTicks as $tick) {
+      $cambio = explode("_", $tick->book);
+      echo '<a class="dropdown-item" href="#" onclick="selectBook(\''.$tick->book.'\')">';
+        echo '<div class="row">';
+          echo '<div class="col-md-4 text-s font-weight-bold text-info text-uppercase mb-1" style="text-align:left;">';
+            echo $cambio[0];
+          echo '</div>';
+          echo '<div class="col-md-8 text-s text-uppercase mb-1" style="text-align:right;">';
+            echo '$'.number_format($tick->last, 2)." ".$cambio[1];
+          echo '</div>';
+        echo '</div>';
+      echo '</a>';
+    }
+  }
+
  ?>
 <head>
 
@@ -57,38 +79,45 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Panel de Control</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
+            <h1 class="h3 mb-0 text-info text-uppercase font-weight-bold"><?php echo $exploded_book[0]." / ".$exploded_book[1]; ?></h1>
+            <div class="dropdown no-arrow">
+              <button class="btn btn-info btn-icon-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="icon text-white-50">
+                  <i class="fas fa-coins"></i>
+                </span>
+                <span class="text">Mercados disponibles</span>
+              </button>
+              <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="width:220px;">
+                <?php
+                foreach ($arrayTicks as $tick) {
+                  $cambio = explode("_", $tick->book);
+                  echo '<a class="dropdown-item" href="index.php?book='.$tick->book.'">';
+                    echo '<div class="row">';
+                      echo '<div class="col-md-4 text-s font-weight-bold text-info text-uppercase mb-1" style="text-align:left;">';
+                        echo $cambio[0];
+                      echo '</div>';
+                      echo '<div class="col-md-8 text-s text-uppercase mb-1" style="text-align:right;">';
+                        echo '$'.number_format($tick->last, 2)." ".$cambio[1];
+                      echo '</div>';
+                    echo '</div>';
+                  echo '</a>';
+                }
+                ?>
+              </div>
+            </div>
           </div>
 
           <!-- Content Row -->
           <div class="row">
 
-            <!-- Earnings (Monthly) Card Example -->
+            <!-- Último precio -->
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                      <div class="font-weight-bold text-primary text-uppercase mb-1">Último precio</div>
+                      <div class="h6 mb-0 font-weight-bold text-uppercase text-gray-800"><?php echo '1 '.$exploded_book[0].' = $'.number_format($current_tick->last, 2).' '.$exploded_book[1];?></div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -98,26 +127,42 @@
               </div>
             </div>
 
-            <!-- Earnings (Monthly) Card Example -->
+            <!-- Precios Máximo y Mínimo -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-4">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Máximo</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Mínimo</div>
+                    </div>
+                    <div class="col mr-2">
+                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->high, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->low, 2);?></div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Precios de Compra y Venta -->
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
+                    <div class="col-4">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Compra</div>
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Venta</div>
+                    </div>
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
-                      <div class="row no-gutters align-items-center">
-                        <div class="col-auto">
-                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                        </div>
-                        <div class="col">
-                          <div class="progress progress-sm mr-2">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->ask, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->bid, 2);?></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <i class="fas fa-comments-dollar fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -129,12 +174,16 @@
               <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
+                    <div class="col-4">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Volumen</div>
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">VWAP</div>
+                    </div>
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo number_format($current_tick->volume, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->vwap, 2);?></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                      <i class="fas fa-box fa-2x text-gray-300 text-right"></i>
                     </div>
                   </div>
                 </div>
@@ -151,21 +200,9 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-info" id="header_book">Libro</h6>
+                  <h6 class="m-0 font-weight-bold text-info">Gráfica</h6>
                   <div class="row">
-                    <div class="col-6">
-                      <div class="dropdown no-arrow">
-                        <button class="btn btn-info btn-icon-split btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="icon text-white-50">
-                            <i class="fas fa-coins"></i>
-                          </span>
-                          <span class="text">Monedas</span>
-                        </button>
-                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
-                          <?php populateDropdownBooks(); ?>
-                        </div>
-                      </div>
-                    </div>
+
                     <div class="col-6">
                       <div class="dropdown no-arrow">
                         <button class="btn btn-info btn-icon-split btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
