@@ -19,6 +19,8 @@
     }
   }
 
+  $tick_date = new DateTime($tick->created_at);
+
   function populateDropdownBooks($arrayTicks) {
     foreach ($arrayTicks as $tick) {
       $cambio = explode("_", $tick->book);
@@ -76,9 +78,9 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
+          <div class="mb-1 text-xs text-right">Último tick recibido: <?php echo $tick_date->format('d/m/y H:i:s T'); ?></div>
           <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <div class="d-sm-flex align-items-center justify-content-between mb-2">
             <h1 class="h3 mb-0 text-info text-uppercase font-weight-bold"><?php echo $exploded_book[0]." / ".$exploded_book[1]; ?></h1>
             <div class="dropdown no-arrow">
               <button class="btn btn-info btn-icon-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -112,7 +114,7 @@
 
             <!-- Último precio -->
             <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card border-left-primary shadow h-100 py-1">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -129,19 +131,19 @@
 
             <!-- Precios Máximo y Mínimo -->
             <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-success shadow h-100 py-2">
+              <div class="card border-left-success shadow h-100 py-1">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col-4">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Máximo</div>
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Mínimo</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-2">Máximo</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-2">Mínimo</div>
                     </div>
                     <div class="col mr-2">
-                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->high, 2);?></div>
-                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->low, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->high, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->low, 2);?></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                      <i class="fas fa-arrows-alt-v fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -150,16 +152,16 @@
 
             <!-- Precios de Compra y Venta -->
             <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-info shadow h-100 py-2">
+              <div class="card border-left-info shadow h-100 py-1">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col-4">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Compra</div>
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Venta</div>
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-2">Compra</div>
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-2">Venta</div>
                     </div>
                     <div class="col mr-2">
-                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->ask, 2);?></div>
-                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->bid, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->ask, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->bid, 2);?></div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-comments-dollar fa-2x text-gray-300"></i>
@@ -171,16 +173,16 @@
 
             <!-- Pending Requests Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
+              <div class="card border-left-warning shadow h-100 py-1">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col-4">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Volumen</div>
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">VWAP</div>
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">Volumen</div>
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">VWAP</div>
                     </div>
                     <div class="col mr-2">
-                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo number_format($current_tick->volume, 2);?></div>
-                      <div class="h6 mb-0 font-weight-bold text-gray-800"><?php echo '$'.number_format($current_tick->vwap, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo number_format($current_tick->volume, 2);?></div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->vwap, 2);?></div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-box fa-2x text-gray-300 text-right"></i>
