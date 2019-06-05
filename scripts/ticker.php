@@ -36,8 +36,7 @@
       echo "Guardando info book: ".$json->payload->book."... <br>";
       $error_code = '0';
       $error_message = '';
-      $tick = new Tick($json->payload->book, $json->payload->volume, $json->payload->last, $json->payload->high, $json->payload->low,
-      $json->payload->vwap, $json->payload->ask, $json->payload->bid, $json->payload->created_at, $produccion);
+      $tick = new Tick($json->payload->book, $json->payload->volume, $json->payload->last, $json->payload->high, $json->payload->low, $json->payload->vwap, $json->payload->ask, $json->payload->bid, $json->payload->created_at, $produccion);
       echo "Info guardada exitosamente! <br>";
       //sendNotifications($book, $max_to_sell, $min_to_buy, $json->payload->last, $recipient);
     } else {  // Se genero un error desde el servidor

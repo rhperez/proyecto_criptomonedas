@@ -32,8 +32,7 @@
       echo 'Respuesta exitosa!';
       $arrayBooks = $json->payload;
       foreach ($arrayBooks as $book) {
-        insertBook(new Book($book->book, $book->minimum_price, $book->maximum_price, $book->minimum_amount, $book->maximum_amount,
-        $book->minimum_value, $book->maximum_value, $produccion));
+        insertBook(new Book($book->book, $book->minimum_price, $book->maximum_price, $book->minimum_amount, $book->maximum_amount, $book->minimum_value, $book->maximum_value, $produccion));
       }
 
     } else {  // Se genero un error desde el servidor

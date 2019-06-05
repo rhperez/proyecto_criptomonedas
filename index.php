@@ -11,8 +11,8 @@
   $exploded_book = explode("_", $current_book);
   $current_tick = null;
 
-  $arrayTicks = getLastTicks();
-  foreach ($arrayTicks as $tick) {
+  $arrayLastTicks = getLastTicks();
+  foreach ($arrayLastTicks as $tick) {
     if ($tick->book == $current_book) {
       $current_tick = $tick;
       break;
@@ -20,22 +20,6 @@
   }
 
   $tick_date = new DateTime($tick->created_at);
-
-  function populateDropdownBooks($arrayTicks) {
-    foreach ($arrayTicks as $tick) {
-      $cambio = explode("_", $tick->book);
-      echo '<a class="dropdown-item" href="#" onclick="selectBook(\''.$tick->book.'\')">';
-        echo '<div class="row">';
-          echo '<div class="col-md-4 text-s font-weight-bold text-info text-uppercase mb-1" style="text-align:left;">';
-            echo $cambio[0];
-          echo '</div>';
-          echo '<div class="col-md-8 text-s text-uppercase mb-1" style="text-align:right;">';
-            echo '$'.number_format($tick->last, 2)." ".$cambio[1];
-          echo '</div>';
-        echo '</div>';
-      echo '</a>';
-    }
-  }
 
  ?>
 <head>
@@ -72,6 +56,8 @@
       <!-- Main Content -->
       <div id="content">
 
+        <?php echo '<input type="hidden" id="current_book" value="'.$current_book.'"></input>';?>
+
         <!-- Topbar -->
         <?php readfile("topbar.html"); ?>
         <!-- End of Topbar -->
@@ -91,7 +77,7 @@
               </button>
               <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="width:220px;">
                 <?php
-                foreach ($arrayTicks as $tick) {
+                foreach ($arrayLastTicks as $tick) {
                   $cambio = explode("_", $tick->book);
                   echo '<a class="dropdown-item" href="index.php?book='.$tick->book.'">';
                     echo '<div class="row">';
@@ -448,7 +434,7 @@
   <script src="vendor/chart.js/Chart.min.js"></script>
 
   <!-- Page level custom scripts -->
-  <script src="js/demo/chart-area-demo.js"></script>
+  <script src="js/charts/main-chart.js"></script>
   <script src="js/demo/chart-pie-demo.js"></script>
 
   <script type="text/javascript">
@@ -456,7 +442,7 @@
     var interval = '1 DAY';
 
     jQuery(document).ready(function($) {
-      $("#header_book").text(current_book.toUpperCase());
+      loadData('btc_mxn', '1DAY');
     });
 
     function selectBook(book) {
