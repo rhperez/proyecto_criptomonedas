@@ -64,7 +64,7 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <div class="mb-1 text-xs text-right">Último tick recibido: <?php echo $tick_date->format('d/m/y H:i:s T'); ?></div>
+          <div class="mb-1 text-xs text-right">Último tick recibido: <?php echo $tick_date->format('d/m/y H:i:s'); ?></div>
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-2">
             <h1 class="h3 mb-0 text-info text-uppercase font-weight-bold"><?php echo $exploded_book[0]." / ".$exploded_book[1]; ?></h1>
@@ -431,7 +431,10 @@
   <script src="js/sb-admin-2.min.js"></script>
 
   <!-- Page level plugins -->
-  <script src="vendor/chart.js/Chart.min.js"></script>
+  <!-- Graphs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/es.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
   <!-- Page level custom scripts -->
   <script src="js/charts/main-chart.js"></script>
@@ -442,7 +445,7 @@
     var interval = '1 DAY';
 
     jQuery(document).ready(function($) {
-      loadData('btc_mxn', '1DAY');
+      loadData($("#current_book").val(), '1DAY');
     });
 
     function selectBook(book) {

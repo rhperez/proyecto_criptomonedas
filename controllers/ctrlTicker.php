@@ -52,13 +52,13 @@
   }
 
   function getLastTicks() {
-    $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, bitso_created_at, status FROM Ticks WHERE id IN (SELECT MAX(id) FROM Ticks WHERE status=1 GROUP BY bitso_book)";
+    $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE id IN (SELECT MAX(id) FROM Ticks WHERE status=1 GROUP BY bitso_book)";
     $conn = connect();
     $result = mysqli_query($conn, $str_query);
     $arrayTicks = array();
     while ($row = $result->fetch_assoc()) {
       $arrayTicks[] = new Tick($row['bitso_book'], $row['bitso_volume'], $row['bitso_last'], $row['bitso_high'], $row['bitso_low'],
-      $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['bitso_created_at'], $row['status']);
+      $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['created_at'], $row['status']);
     }
     $conn->close();
     return $arrayTicks;
@@ -70,13 +70,15 @@
       default:
         $limit = " LIMIT 48 ";
     }
-    $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, bitso_created_at, status FROM (SELECT * FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' ORDER BY created_at DESC".$limit.") sub ORDER BY created_at ASC";
+    $str_exec = "SET @a = 0";
+    $str_query = "SELECT * FROM ( SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' ORDER BY created_at DESC) sub2 WHERE (@a := @a + 1) % 2 = 1".$limit;
     $conn = connect();
+    mysqli_query($conn, $str_exec);
     $result = mysqli_query($conn, $str_query);
     $arrayTicks = array();
     while ($row = $result->fetch_assoc()) {
       $arrayTicks[] = new Tick($row['bitso_book'], $row['bitso_volume'], $row['bitso_last'], $row['bitso_high'], $row['bitso_low'],
-      $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['bitso_created_at'], $row['status']);
+      $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['created_at'], $row['status']);
     }
     $conn->close();
     return $arrayTicks;

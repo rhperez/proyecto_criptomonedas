@@ -11,12 +11,12 @@ function loadData(book, intervalo) {
     data: {'accion':'getTicks', 'book': book, 'intervalo': intervalo},
     success: function(data) {
       var arrTickDate = [];
+      var arrTickHour = [];
       var arrLast = [];
       var arrVolume = [];
       var arrVwap = [];
       var arrAsk = [];
       var arrBid = [];
-      var arrCreatedAt = [];
       var arrStatus = [];
       var lastColor = '#6495ED';
       var lastColorLight = '#00BFFF';
@@ -27,7 +27,9 @@ function loadData(book, intervalo) {
       var vwapColor = '#753396';
       var vwapColorLight = '#9d55c1';
       for(var i in data) {
-        arrTickDate.push(data[i].created_at);
+        var timestamp = (data[i].created_at).split(" "); // divide el timestamp en fecha y hora
+        arrTickDate.push(data[i].created_at); // fecha
+        arrTickHour.push(timestamp[1].substring(0,5)); // hora
         arrLast.push(data[i].status == 1 ? data[i].last : NaN);
         arrVolume.push(data[i].status == 1 ? data[i].volume : NaN);
         arrVwap.push(data[i].status == 1 ? data[i].vwap : NaN);
@@ -42,20 +44,51 @@ function loadData(book, intervalo) {
         data: {
           labels: arrTickDate,
           datasets: [{
-            label: "Precio",
-            lineTension: 0.3,
-            backgroundColor: "rgba(78, 115, 223, 0.05)",
-            borderColor: "rgba(78, 115, 223, 1)",
-            pointRadius: 3,
-            pointBackgroundColor: "rgba(78, 115, 223, 1)",
-            pointBorderColor: "rgba(78, 115, 223, 1)",
-            pointHoverRadius: 3,
-            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-            pointHitRadius: 10,
-            pointBorderWidth: 2,
+            label: "Último Precio",
+            backgroundColor: 'transparent',
+            borderColor: lastColor,
+            pointHoverBackgroundColor: lastColorLight,
+            borderWidth: 1,
+            pointRadius: 2,
+            pointBorderColor: lastColor,
+            pointBackgroundColor: lastColor,
+            pointStyle: 'circle',
             data: arrLast,
-          }],
+          }, {
+            label: "Precio de Compra",
+            backgroundColor: 'transparent',
+            borderColor: askColor,
+            pointHoverBackgroundColor: askColorLight,
+            borderWidth: 1,
+            pointRadius: 2,
+            pointBorderColor: askColor,
+            pointBackgroundColor: askColor,
+            pointStyle: 'circle',
+            data: arrAsk,
+          }, {
+            label: "Precio de Venta",
+            backgroundColor: 'transparent',
+            borderColor: bidColor,
+            pointHoverBackgroundColor: bidColorLight,
+            borderWidth: 1,
+            pointRadius: 2,
+            pointBorderColor: bidColor,
+            pointBackgroundColor: bidColor,
+            pointStyle: 'circle',
+            data: arrBid,
+          }, {
+            label: "Precio Medio Ponderado (VWAP)",
+            backgroundColor: 'transparent',
+            borderColor: vwapColor,
+            pointHoverBackgroundColor: vwapColorLight,
+            borderWidth: 1,
+            pointRadius: 2,
+            pointBorderColor: vwapColor,
+            pointBackgroundColor: vwapColor,
+            pointStyle: 'circle',
+            data: arrVwap,
+          }
+        ],
         },
         options: {
           maintainAspectRatio: false,
@@ -69,15 +102,17 @@ function loadData(book, intervalo) {
           },
           scales: {
             xAxes: [{
+              type: 'time',
               time: {
-                unit: 'date'
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
+                unit: 'hour',
+                unitStepSize: 1,
+                tooltipFormat: "DD/MMMM/YYYY, h:mm a",
+                displayFormats: {
+                  hour: 'H:mm'
+                }
               },
               ticks: {
-                maxTicksLimit: 7
+                maxTicksLimit: 10
               }
             }],
             yAxes: [{
@@ -99,10 +134,11 @@ function loadData(book, intervalo) {
             }],
           },
           legend: {
-            display: false
+            labels: {
+              usePointStyle: true
+            }
           },
           tooltips: {
-            backgroundColor: "rgb(255,255,255)",
             bodyFontColor: "#858796",
             titleMarginBottom: 10,
             titleFontColor: '#6e707e',
@@ -111,7 +147,7 @@ function loadData(book, intervalo) {
             borderWidth: 1,
             xPadding: 15,
             yPadding: 15,
-            displayColors: false,
+            displayColors: true,
             intersect: false,
             mode: 'index',
             caretPadding: 10,
