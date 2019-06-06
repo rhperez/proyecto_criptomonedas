@@ -82,7 +82,7 @@ function loadData(book, intervalo) {
             pointStyle: 'circle',
             data: arrBid,
           }, {
-            label: "Precio Medio Ponderado (VWAP)",
+            label: "Precio Ponderado",
             backgroundColor: 'transparent',
             borderColor: vwapColor,
             pointHoverBackgroundColor: vwapColorLight,
@@ -110,7 +110,7 @@ function loadData(book, intervalo) {
               type: 'time',
               time: {
                 unit: 'hour',
-                unitStepSize: 1,
+                unitStepSize: 2,
                 tooltipFormat: "DD/MMMM/YYYY, h:mm a",
                 displayFormats: {
                   hour: 'H:mm'
@@ -159,7 +159,7 @@ function loadData(book, intervalo) {
             callbacks: {
               label: function(tooltipItem, chart) {
                 var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                return datasetLabel + ': $' + number_format(tooltipItem.yLabel, 2, '.', ',');
               }
             }
           }

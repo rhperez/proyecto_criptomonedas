@@ -19,6 +19,10 @@
     }
   }
 
+  $arrayOpenTicks = getOpenTicks($current_book);
+  $open_tick = $arrayOpenTicks[sizeof($arrayOpenTicks) - 1];
+  $close_tick = $current_tick;
+
   $tick_date = new DateTime($tick->created_at);
 
  ?>
@@ -67,7 +71,7 @@
           <div class="mb-1 text-xs text-right">Último tick recibido: <?php echo $tick_date->format('d/m/y H:i:s'); ?></div>
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-2">
-            <h1 class="h3 mb-0 text-info text-uppercase font-weight-bold"><?php echo $exploded_book[0]." / ".$exploded_book[1]; ?></h1>
+            <h2 class="h2 mb-0 text-info text-uppercase font-weight-bold">Mercado <?php echo $exploded_book[0]." / ".$exploded_book[1]; ?></h1>
             <div class="dropdown no-arrow">
               <button class="btn btn-info btn-icon-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="icon text-white-50">
@@ -98,99 +102,14 @@
           <!-- Content Row -->
           <div class="row">
 
-            <!-- Último precio -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-primary shadow h-100 py-1">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="font-weight-bold text-primary text-uppercase mb-1">Último precio</div>
-                      <div class="h6 mb-0 font-weight-bold text-uppercase text-gray-800"><?php echo '1 '.$exploded_book[0].' = $'.number_format($current_tick->last, 2).' '.$exploded_book[1];?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Precios Máximo y Mínimo -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-success shadow h-100 py-1">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col-4">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-2">Máximo</div>
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-2">Mínimo</div>
-                    </div>
-                    <div class="col mr-2">
-                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->high, 2);?></div>
-                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->low, 2);?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-arrows-alt-v fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Precios de Compra y Venta -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-info shadow h-100 py-1">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col-4">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-2">Compra</div>
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-2">Venta</div>
-                    </div>
-                    <div class="col mr-2">
-                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->ask, 2);?></div>
-                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->bid, 2);?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-comments-dollar fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pending Requests Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-1">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col-4">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">Volumen</div>
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">VWAP</div>
-                    </div>
-                    <div class="col mr-2">
-                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo number_format($current_tick->volume, 2);?></div>
-                      <div class="h6 mb-0 font-weight-bold text-gray-800 mb-2"><?php echo '$'.number_format($current_tick->vwap, 2);?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-box fa-2x text-gray-300 text-right"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Content Row -->
-
-          <div class="row">
-
             <!-- Area Chart -->
-            <div class="col-xl-9 col-lg-7">
+            <div class="col-xl-8 col-lg-7">
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-info text-uppercase"><?php echo $exploded_book[0].' / '.$exploded_book[1];?> precios últimas horas</h6>
+                  <h6 class="m-0 font-weight-bold text-info text-uppercase">Movimientos últimas 24 horas</h6>
+                  <!--
                   <div class="row">
-
                     <div class="col-6">
                       <div class="dropdown no-arrow">
                         <button class="btn btn-info btn-icon-split btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -205,6 +124,7 @@
                       </div>
                     </div>
                   </div>
+                -->
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -215,44 +135,25 @@
               </div>
             </div>
 
-            <!-- Pie Chart -->
-            <div class="col-xl-3 col-lg-5">
+            <!-- Card Indicadores -->
+            <div class="col-xl-4 col-lg-7">
               <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">Dropdown Header:</div>
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-info text-uppercase">Indicadores</h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
-                  <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart"></canvas>
-                  </div>
-                  <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Social
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Referral
-                    </span>
-                  </div>
+                  <div class="text-info mb-4">Último Precio<span class="float-right text-uppercase text-gray-800"><?php echo '$'.number_format($current_tick->last, 2).' '.$exploded_book[1];?></span></div>
+                  <div class="text-info mb-4">Precio Máximo<span class="float-right text-uppercase text-gray-800"><?php echo '$'.number_format($current_tick->high, 2).' '.$exploded_book[1];?></span></div>
+                  <div class="text-info mb-4">Precio Mínimo<span class="float-right text-uppercase text-gray-800"><?php echo '$'.number_format($current_tick->low, 2).' '.$exploded_book[1];?></span></div>
+                  <div class="text-info mb-4">Precio de Compra<span class="float-right text-uppercase text-gray-800"><?php echo '$'.number_format($current_tick->bid, 2).' '.$exploded_book[1];?></span></div>
+                  <div class="text-info mb-4">Precio de Venta<span class="float-right text-uppercase text-gray-800"><?php echo '$'.number_format($current_tick->ask, 2).' '.$exploded_book[1];?></span></div>
+                  <div class="text-info mb-4">Vol. de Compra<span class="float-right text-uppercase text-gray-800"><?php echo number_format($current_tick->volume, 2).' '.$exploded_book[0];?></span></div>
+                  <div class="text-info mb-1">Precio Ponderado<span class="float-right text-uppercase text-gray-800"><?php echo '$'.number_format($current_tick->vwap, 2).' '.$exploded_book[1];?></span></div>
+
                 </div>
               </div>
             </div>
+
           </div>
 
           <!-- Content Row -->
