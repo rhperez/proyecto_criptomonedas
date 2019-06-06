@@ -51,36 +51,67 @@
     return $arrayBooks;
   }
 
+  /**
+   *  Obtiene los ultimos ticks de cada book
+   *
+   *  @return Tick array: el arreglo de ticks obtenidos
+   */
   function getLastTicks() {
     $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE id IN (SELECT MAX(id) FROM Ticks WHERE status=1 GROUP BY bitso_book)";
-    $conn = connect();
-    $result = mysqli_query($conn, $str_query);
-    $arrayTicks = array();
-    while ($row = $result->fetch_assoc()) {
-      $arrayTicks[] = new Tick($row['bitso_book'], $row['bitso_volume'], $row['bitso_last'], $row['bitso_high'], $row['bitso_low'],
-      $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['created_at'], $row['status']);
-    }
-    $conn->close();
-    return $arrayTicks;
+    return executeTicksQuery($str_query);
   }
 
+  /**
+   *  Obtiene los ticks de un book en un intervalo dado
+   *
+   *  @param string book: el book del que se obtendran los ticks
+   *  @param string intervalo: el intervalo en el que se obtendrán los ticks
+   *  @return Tick array: el arreglo de ticks obtenidos
+   */
   function getTicks($book, $intervalo) {
     switch ($intervalo) {
       case '1_DAY':
       default:
-        $limit = " LIMIT 48 ";
+        $limit = " LIMIT 50 ";
     }
-    $str_exec = "SET @a = 0";
-    $str_query = "SELECT * FROM ( SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' ORDER BY created_at DESC) sub2 WHERE (@a := @a + 1) % 2 = 1".$limit;
-    $conn = connect();
-    mysqli_query($conn, $str_exec);
-    $result = mysqli_query($conn, $str_query);
+    $str_pre_query = "SET @a = 0; ";
+    $str_query = "SELECT * FROM ( SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' ORDER BY created_at DESC) sub2 WHERE (@a := @a + 1) % 2 = 1".$limit.";";
+    return executeTicksQuery($str_query, $str_pre_query);
+  }
+
+  /**
+   *  Obtiene los ticks de apertura de un book
+   *
+   *  @param string book: el book del que se obtendran los ticks
+   *  @return Tick array: el arreglo de ticks de apertura obtenidos
+   */
+  function getOpenTicks($book) {
+      $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' AND HOUR(created_at) = 0 AND MINUTE(created_at) = 0";
+      return executeTicksQuery($str_query);
+  }
+
+  /**
+   *  Executa queries que devuelven arreglos de ticks
+   *
+   *  @param string query: el query a ejecutar
+   *  @param string pre_query opcional: query previo a ejecutar antes del query principal
+   *  @return Tick array: el arreglo de ticks obtenidos
+   */
+  function executeTicksQuery($str_query, $str_pre_query = null) {
+    $mysqli = connect();
+    if ($str_pre_query) {
+      $mysqli->multi_query($str_pre_query);
+    }
+    $result = $mysqli->query($str_query);
+    if (!$result->num_rows) {
+      return null;
+    }
     $arrayTicks = array();
     while ($row = $result->fetch_assoc()) {
       $arrayTicks[] = new Tick($row['bitso_book'], $row['bitso_volume'], $row['bitso_last'], $row['bitso_high'], $row['bitso_low'],
       $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['created_at'], $row['status']);
     }
-    $conn->close();
+    $mysqli->close();
     return $arrayTicks;
   }
 

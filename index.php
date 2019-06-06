@@ -184,11 +184,11 @@
           <div class="row">
 
             <!-- Area Chart -->
-            <div class="col-xl-8 col-lg-7">
+            <div class="col-xl-9 col-lg-7">
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-info">Gráfica</h6>
+                  <h6 class="m-0 font-weight-bold text-info text-uppercase"><?php echo $exploded_book[0].' / '.$exploded_book[1];?> precios últimas horas</h6>
                   <div class="row">
 
                     <div class="col-6">
@@ -216,7 +216,7 @@
             </div>
 
             <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-5">
+            <div class="col-xl-3 col-lg-5">
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">

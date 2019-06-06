@@ -9,7 +9,12 @@ function loadData(book, intervalo) {
     dataType: 'json',
     method: "GET",
     data: {'accion':'getTicks', 'book': book, 'intervalo': intervalo},
-    success: function(data) {
+    success: function(r) {
+      if (r.response == 'error') {
+        alert(r.error_message);
+        return;
+      }
+      var data = r.data;
       var arrTickDate = [];
       var arrTickHour = [];
       var arrLast = [];
