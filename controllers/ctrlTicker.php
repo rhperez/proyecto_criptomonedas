@@ -52,6 +52,17 @@
   }
 
   /**
+   *  Obtiene los ticks de un book
+   *
+   *  @param string book: el book del que se obtendran los ticks
+   *  @return Tick array: el arreglo de ticks obtenidos
+   */
+  function getTicks($book) {
+    $str_query = "SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' ORDER BY created_at";
+    return executeTicksQuery($str_query);
+  }
+
+  /**
    *  Obtiene los ultimos ticks de cada book
    *
    *  @return Tick array: el arreglo de ticks obtenidos
@@ -68,7 +79,7 @@
    *  @param string intervalo: el intervalo en el que se obtendrán los ticks
    *  @return Tick array: el arreglo de ticks obtenidos
    */
-  function getTicks($book, $intervalo) {
+  function getTicksIntervalo($book, $intervalo) {
     switch ($intervalo) {
       case '1_DAY':
       default:

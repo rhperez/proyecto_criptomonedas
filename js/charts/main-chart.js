@@ -139,6 +139,7 @@ function loadData(book, intervalo) {
             }],
           },
           legend: {
+            position: 'bottom',
             labels: {
               usePointStyle: true
             }

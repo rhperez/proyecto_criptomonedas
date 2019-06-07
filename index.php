@@ -70,8 +70,9 @@
         <div class="container-fluid">
           <div class="mb-1 text-xs text-right">Último tick recibido: <?php echo $tick_date->format('d/m/y H:i:s'); ?></div>
           <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-2">
-            <h2 class="h2 mb-0 text-info text-uppercase font-weight-bold">Mercado <?php echo $exploded_book[0]." / ".$exploded_book[1]; ?></h1>
+          <div class="d-sm-flex align-items-center justify-content-between mb-3">
+            <h1 class="h3 mb-2 text-gray-800 text-uppercase">Mercado <?php echo $exploded_book[0]." / ".$exploded_book[1]; ?></h1>
+
             <div class="dropdown no-arrow">
               <button class="btn btn-info btn-icon-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="icon text-white-50">
@@ -108,23 +109,18 @@
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-info text-uppercase">Movimientos últimas 24 horas</h6>
-                  <!--
-                  <div class="row">
-                    <div class="col-6">
-                      <div class="dropdown no-arrow">
-                        <button class="btn btn-info btn-icon-split btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="icon text-white-50">
-                            <i class="far fa-calendar"></i>
-                          </span>
-                          <span class="text">Periodos</span>
-                        </button>
-                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
-
-                        </div>
-                      </div>
+                  <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-chevron-down fa-sm fa-fw text-info"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                      <div class="dropdown-header text-info">Gráficas disponibles:</div>
+                      <a class="dropdown-item" href="#">Movimientos últimas 24 horas</a>
+                      <a class="dropdown-item" href="#">Gráfica de velas</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Ver más...</a>
                     </div>
                   </div>
-                -->
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -136,7 +132,7 @@
             </div>
 
             <!-- Card Indicadores -->
-            <div class="col-xl-4 col-lg-7">
+            <div class="col-xl-4 col-lg-7 mb-2">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-info text-uppercase">Indicadores</h6>
