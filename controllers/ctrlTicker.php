@@ -3,6 +3,7 @@
   include_once "/home4/digitab1/public_html/proyecto_criptomonedas/connections/conn.php";
   include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/tick.php";
   include_once "/home4/digitab1/public_html/proyecto_criptomonedas/classes/book.php";
+  include_once "/home4/digitab1/public_html/proyecto_criptomonedas/includes/settings.php";
 
   /**
    *  Almacena la informacion de un tick en la base de datos.
@@ -54,11 +55,13 @@
   /**
    *  Obtiene los ticks de un book
    *
-   *  @param string book: el book del que se obtendran los ticks
+   *  @param string book: opcional, el book del que se obtendran los ticks.
+   *  Si no se proporciona, devuelve ticks de todos los books
    *  @return Tick array: el arreglo de ticks obtenidos
    */
-  function getTicks($book) {
-    $str_query = "SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' ORDER BY created_at";
+  function getTicks($book = null) {
+    $where_book = $book ? " AND bitso_book = '".$book."' " : "";
+    $str_query = "SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 ".$where_book." ORDER BY id DESC LIMIT 999";
     return executeTicksQuery($str_query);
   }
 
@@ -68,7 +71,7 @@
    *  @return Tick array: el arreglo de ticks obtenidos
    */
   function getLastTicks() {
-    $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE id IN (SELECT MAX(id) FROM Ticks WHERE status=1 GROUP BY bitso_book)";
+    $str_query = "SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE id IN (SELECT MAX(id) FROM Ticks WHERE status=1 GROUP BY bitso_book)";
     return executeTicksQuery($str_query);
   }
 
@@ -97,7 +100,7 @@
    *  @return Tick array: el arreglo de ticks de apertura obtenidos
    */
   function getOpenTicks($book) {
-      $str_query = "SELECT bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' AND HOUR(created_at) = 0 AND MINUTE(created_at) = 0";
+      $str_query = "SELECT id, bitso_book, bitso_volume, bitso_last, bitso_high, bitso_low, bitso_vwap, bitso_ask, bitso_bid, created_at, status FROM Ticks WHERE status = 1 AND bitso_book = '".$book."' AND HOUR(created_at) = 0 AND MINUTE(created_at) = 0";
       return executeTicksQuery($str_query);
   }
 
@@ -119,7 +122,7 @@
     }
     $arrayTicks = array();
     while ($row = $result->fetch_assoc()) {
-      $arrayTicks[] = new Tick($row['bitso_book'], $row['bitso_volume'], $row['bitso_last'], $row['bitso_high'], $row['bitso_low'],
+      $arrayTicks[] = new Tick($row['id'], $row['bitso_book'], $row['bitso_volume'], $row['bitso_last'], $row['bitso_high'], $row['bitso_low'],
       $row['bitso_vwap'], $row['bitso_ask'], $row['bitso_bid'], $row['created_at'], $row['status']);
     }
     $mysqli->close();

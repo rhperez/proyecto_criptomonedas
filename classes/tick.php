@@ -6,6 +6,7 @@
    */
   class Tick {
 
+    public $id;
     public $book;
     public $volume;
     public $last;
@@ -17,7 +18,8 @@
     public $created_at;
     public $status;
 
-    public function __construct($book, $volume, $last, $high, $low, $vwap, $ask, $bid, $created_at, $status) {
+    public function __construct($id, $book, $volume, $last, $high, $low, $vwap, $ask, $bid, $created_at, $status) {
+        $this->id = $id;
         $this->book = $book;
         $this->volume = $volume;
         $this->last = $last;

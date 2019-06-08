@@ -17,9 +17,10 @@
       break;
     case 'getTicksTable':
       if (!isset($_GET['book'])) {
-        die();
+        echo buildJsonTicksTable(getTicks());
+      } else {
+        echo buildJsonTicksTable(getTicks($_GET['book']));
       }
-      echo buildJsonTicksTable(getTicks($_GET['book']));
       break;
   }
 
@@ -51,7 +52,7 @@
     $arrayTicksTable = array();
     $i = 1;
     foreach ($arrayTicks as $tick) {
-      $arrayTicksTable[] = array($i++, $tick->last, $tick->high, $tick->low, $tick->bid, $tick->ask, $tick->vwap, $tick->volume, $tick->created_at);
+      $arrayTicksTable[] = array($tick->id, $tick->book, '$'.number_format($tick->last, 2), '$'.number_format($tick->high, 2), '$'.number_format($tick->low, 2), '$'.number_format($tick->bid, 2), '$'.number_format($tick->ask, 2), '$'.number_format($tick->vwap, 2), number_format($tick->volume, 2), $tick->created_at);
     }
     return json_encode(array('data' => $arrayTicksTable));
   }

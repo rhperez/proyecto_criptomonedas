@@ -29,14 +29,14 @@
       echo "<strong>Error 400:</strong> No se obtuvo respuesta del servidor.<br>";
       $error_code = '400';
       $error_message = 'No se obtuvo respuesta del servidor.';
-      $tick = new Tick($book, '', '', '', '', '', '', '', '', $status);
+      $tick = new Tick(0, $book, '', '', '', '', '', '', '', '', $status);
     }
     $json = json_decode($response);   // Guarda la respuesta en un json
     if ($json->success) {   // Se obtuvo el tick sin problemas
       echo "Guardando info book: ".$json->payload->book."... <br>";
       $error_code = '0';
       $error_message = '';
-      $tick = new Tick($json->payload->book, $json->payload->volume, $json->payload->last, $json->payload->high, $json->payload->low, $json->payload->vwap, $json->payload->ask, $json->payload->bid, $json->payload->created_at, $produccion);
+      $tick = new Tick(0, $json->payload->book, $json->payload->volume, $json->payload->last, $json->payload->high, $json->payload->low, $json->payload->vwap, $json->payload->ask, $json->payload->bid, $json->payload->created_at, $produccion);
       echo "Info guardada exitosamente! <br>";
       //sendNotifications($book, $max_to_sell, $min_to_buy, $json->payload->last, $recipient);
     } else {  // Se genero un error desde el servidor
@@ -44,7 +44,7 @@
       echo "<strong>Error $json->error->code:</strong> $json->error->message.<br>";
       $error_code = $json->error->code;
       $error_message = $json->error->message;
-      $tick = new Tick($book, '', '', '', '', '', '', '', '', $status);
+      $tick = new Tick(0, $book, '', '', '', '', '', '', '', '', $status);
     }
     insertTick($tick, $error_code, $error_message);   // Almacena el tick
     curl_close($ch);

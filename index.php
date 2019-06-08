@@ -34,7 +34,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Proyecto Criptomonedas - Panel de Control</title>
+  <title>Digitable Trading - Panel de Control</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -51,7 +51,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <?php readfile("sidebar.html"); ?>
+    <?php include_once "sidebar.php"; ?>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -63,7 +63,7 @@
         <?php echo '<input type="hidden" id="current_book" value="'.$current_book.'"></input>';?>
 
         <!-- Topbar -->
-        <?php readfile("topbar.html"); ?>
+        <?php include_once "topbar.php"; ?>
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->

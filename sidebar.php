@@ -95,9 +95,9 @@
 
   <!-- Nav Item - Tables -->
   <li class="nav-item">
-    <a class="nav-link" href="tables.html">
-      <i class="fas fa-fw fa-table"></i>
-      <span>Tablas</span></a>
+    <a class="nav-link" href="registros.php">
+      <i class="fas fa-fw fa-th-list"></i>
+      <span>Registros</span></a>
   </li>
 
   <!-- Divider -->
