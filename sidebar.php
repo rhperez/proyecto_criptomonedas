@@ -68,36 +68,30 @@
 
   <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-      <i class="fas fa-fw fa-folder"></i>
-      <span>Páginas</span>
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePagesCharts" aria-expanded="true" aria-controls="collapsePages">
+      <i class="fas fa-fw fa-chart-area"></i>
+      <span>Gráficas</span>
     </a>
-    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+    <div id="collapsePagesCharts" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Login Screens:</h6>
-        <a class="collapse-item" href="login.html">Login</a>
-        <a class="collapse-item" href="register.html">Register</a>
-        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-        <div class="collapse-divider"></div>
-        <h6 class="collapse-header">Otras Páginas:</h6>
-        <a class="collapse-item" href="404.html">404 Page</a>
-        <a class="collapse-item" href="blank.html">Blank Page</a>
+        <a class="collapse-item" href="charts.php?chart=1DAY&book=<?php echo $current_book;?>">Actividad Diaria</a>
+        <a class="collapse-item" href="charts.php?chart=CANDLE&book=<?php echo $current_book;?>">Gráfica de Velas</a>
       </div>
     </div>
   </li>
 
-  <!-- Nav Item - Charts -->
-  <li class="nav-item">
-    <a class="nav-link" href="charts.html">
-      <i class="fas fa-fw fa-chart-area"></i>
-      <span>Gráficas</span></a>
-  </li>
-
   <!-- Nav Item - Tables -->
   <li class="nav-item">
-    <a class="nav-link" href="registros.php">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePagesRegistros" aria-expanded="true" aria-controls="collapsePages">
       <i class="fas fa-fw fa-th-list"></i>
-      <span>Registros</span></a>
+      <span>Registros</span>
+    </a>
+    <div id="collapsePagesRegistros" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="registros.php?book=<?php echo $current_book;?>">Registro de Ticks</a>
+        <a class="collapse-item" href="apertura_cierre.php?book=<?php echo $current_book;?>">Aperturas y Cierres</a>
+      </div>
+    </div>
   </li>
 
   <!-- Divider -->

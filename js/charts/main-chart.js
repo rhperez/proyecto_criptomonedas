@@ -2,7 +2,7 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-function loadData(book, intervalo) {
+function loadMain(book, intervalo) {
   $.ajax({
     url: "/proyecto_criptomonedas/api/requests.php",
     contentType: "application/json; charset=utf-8",

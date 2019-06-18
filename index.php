@@ -333,22 +333,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/es.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
-  <!-- Page level custom scripts -->
+
+  <!-- Graficas -->
   <script src="js/charts/main-chart.js"></script>
-  <script src="js/demo/chart-pie-demo.js"></script>
 
   <script type="text/javascript">
     var current_book = 'BTC_MXN';
-    var interval = '1 DAY';
+    var interval = '1DAY';
 
     jQuery(document).ready(function($) {
-      loadData($("#current_book").val(), '1DAY');
+      loadMain($("#current_book").val(), '1DAY');
     });
 
-    function selectBook(book) {
-      current_book = book;
-      $("#header_book").text(current_book.toUpperCase());
-    }
   </script>
 
 </body>

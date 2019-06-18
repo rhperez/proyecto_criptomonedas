@@ -84,7 +84,7 @@
    */
   function getTicksIntervalo($book, $intervalo) {
     switch ($intervalo) {
-      case '1_DAY':
+      case '1DAY':
       default:
         $limit = " LIMIT 50 ";
     }
